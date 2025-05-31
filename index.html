@@ -711,7 +711,7 @@
             genreSelect.addEventListener('change', updateKeywordPlaceholder);
             
             function closeTheModal() {
-                if (lyricsModal) { // Check if modal exists
+                if (lyricsModal) { 
                     lyricsModal.classList.add('hidden');
                     lyricsModal.classList.remove('active');
                 }
@@ -749,25 +749,24 @@
                 errorMessageDiv.classList.add('hidden');
                 currentSuggestions = []; 
 
-                // Construct the URL to call your Netlify Function
                 const netlifyFunctionUrl = `/.netlify/functions/getLirricalIdeas?genre=${encodeURIComponent(genre)}&keywords=${encodeURIComponent(keywords)}`;
-                console.log("Calling Netlify Function:", netlifyFunctionUrl); // Log the URL being called
+                console.log("Calling Netlify Function for Suggestions:", netlifyFunctionUrl); 
 
                 try {
                     const response = await fetch(netlifyFunctionUrl); 
 
-                    console.log("Netlify Function Response Status:", response.status); // Log status
+                    console.log("Netlify Function (Suggestions) Response Status:", response.status); 
 
                     if (!response.ok) {
-                        let errorDetail = `Request to our server failed with status ${response.status}.`;
+                        let errorDetail = `Suggestions API failed (${response.status}).`; 
                         try {
                             const errorData = await response.json(); 
                             errorDetail = errorData.error || errorData.message || `Suggestions API responded with status ${response.status}. Details: ${JSON.stringify(errorData)}`;
-                            console.error("Parsed Error from Netlify Function:", errorData);
+                            console.error("Parsed Error from getLirricalIdeas Function:", errorData);
                         } catch (e) {
                             const textError = await response.text();
                             errorDetail += ` Server response: ${textError || response.statusText}`;
-                            console.warn("Could not parse error response from Netlify function as JSON. Raw text:", textError);
+                            console.warn("Could not parse error response from getLirricalIdeas function as JSON. Raw text:", textError);
                         }
                         throw new Error(errorDetail);
                     }
@@ -943,64 +942,89 @@
                 const inlineLyricsTargetId = button.dataset.inlineLyricsTarget;
                 const inlineLoaderTargetId = button.dataset.inlineLoaderTarget;
                 
-                const lyricsTextContainerForModal = document.getElementById('modalLyricsText'); // Target for modal
-                const lyricsLoaderForModal = document.getElementById('modalLyricsLoader'); // Target for modal loader
+                const lyricsTextContainerForModal = document.getElementById('modalLyricsText'); 
+                const lyricsLoaderForModal = document.getElementById('modalLyricsLoader'); 
 
-                if (window.innerWidth >= 768) {
-                    lyricsModal.classList.remove('hidden');
-                    lyricsModal.classList.add('active');
-                    
-                    if (closeModalButton) {
-                         closeModalButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-                    }
-                    if (modalCopyLyricsButton) {
+                if (window.innerWidth >= 768) { // Desktop - use modal
+                    if (lyricsModal && modalSongTitle && lyricsTextContainerForModal && lyricsLoaderForModal && closeModalButton && modalCopyLyricsButton) {
+                        lyricsModal.classList.remove('hidden');
+                        lyricsModal.classList.add('active');
+                        
+                        closeModalButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
                         modalCopyLyricsButton.innerHTML = '<i data-lucide="copy" class="lucide-icon lucide-xs mr-1"></i>Copy';
                         modalCopyLyricsButton.classList.remove('copied'); 
-                    }
 
-                    requestAnimationFrame(() => { 
-                        safeCreateLucideIcons(); 
-                    });
-                    modalSongTitle.textContent = `Lyrics for: ${songTitle}`;
-                    if (lyricsTextContainerForModal) lyricsTextContainerForModal.textContent = ''; 
-                    if (lyricsLoaderForModal) lyricsLoaderForModal.classList.remove('hidden');
-                    
-                    fetchAndDisplayLyrics(songTitle, genre, lyricsTextContainerForModal, lyricsLoaderForModal, button, true); // Pass true for modal
-                } else {
+                        requestAnimationFrame(() => { 
+                            safeCreateLucideIcons(); 
+                        });
+                        modalSongTitle.textContent = `Lyrics for: ${songTitle}`;
+                        if (lyricsTextContainerForModal) lyricsTextContainerForModal.textContent = ''; 
+                        if (lyricsLoaderForModal) lyricsLoaderForModal.classList.remove('hidden');
+                        
+                        fetchAndDisplayLyrics(songTitle, genre, lyricsTextContainerForModal, lyricsLoaderForModal, button); // Removed 'isModal' as it's implied
+                    } else {
+                        console.error("Modal elements not found for lyric generation.");
+                    }
+                } else { // Mobile - use inline
                     const lyricsDiv = document.getElementById(inlineLyricsTargetId); 
                     const loaderDiv = document.getElementById(inlineLoaderTargetId);
-                    const lyricsTextContainer = lyricsDiv.querySelector('.lyrics-content');
+                    const lyricsTextContainer = lyricsDiv ? lyricsDiv.querySelector('.lyrics-content') : null;
                     
-                    if (lyricsDiv) lyricsDiv.classList.remove('hidden'); 
-                    fetchAndDisplayLyrics(songTitle, genre, lyricsTextContainer, loaderDiv, button, false); // Pass false for inline
+                    if (lyricsDiv && lyricsTextContainer && loaderDiv) {
+                        lyricsDiv.classList.remove('hidden'); 
+                        fetchAndDisplayLyrics(songTitle, genre, lyricsTextContainer, loaderDiv, button); // Removed 'isModal'
+                    } else {
+                         console.error("Inline lyric elements not found.");
+                    }
                 }
             }
 
-            async function fetchAndDisplayLyrics(songTitle, genre, lyricsTextContainerElement, loaderElement, clickedButton, isModal) {
+            async function fetchAndDisplayLyrics(songTitle, genre, lyricsTextContainerElement, loaderElement, clickedButton) {
                 if(clickedButton) clickedButton.disabled = true;
                 if(loaderElement) loaderElement.classList.remove('hidden');
                 if(lyricsTextContainerElement) lyricsTextContainerElement.textContent = ''; 
 
-                // This prompt is for lyrics, it should go to a dedicated lyrics function or an adapted getLirricalIdeas.
-                // For now, we'll assume we need to build a specific prompt for a *new* lyrics function.
-                // For TEST purposes with MINIMAL FUNCTION, this part will NOT work as expected.
-                // This function body needs to be adapted once the main suggestion flow is fixed.
-                // For now, to test the suggestion flow, we'll just put a placeholder if this is called.
-                
-                // Placeholder if we are still debugging the main suggestion function
-                if (lyricsTextContainerElement) {
-                     lyricsTextContainerElement.textContent = "Lyrics generation feature to be fully implemented after suggestions are working.\nIf you expected lyrics here, ensure the main 'Get Suggestions' works first, then we'll build a dedicated lyrics function.";
-                }
-                if(clickedButton) clickedButton.disabled = false;
-                if(loaderElement) loaderElement.classList.add('hidden');
-                console.warn("fetchAndDisplayLyrics called, but actual lyric generation API call is placeholder for now until suggestion flow is fixed.");
-                return; 
+                const netlifyLyricsFunctionUrl = `/.netlify/functions/generateSongLyrics?songTitle=${encodeURIComponent(songTitle)}&genre=${encodeURIComponent(genre)}`;
+                console.log("Calling Netlify Function for Lyrics:", netlifyLyricsFunctionUrl);
 
-                // --- ACTUAL LYRICS FETCH LOGIC WOULD GO HERE (calling a NEW Netlify Function for lyrics) ---
-                // const lyricsPrompt = `Generate song lyrics for "${songTitle}" in the ${genre} genre...`;
-                // const netlifyLyricsFunctionUrl = `/.netlify/functions/generateSongLyrics?title=${encodeURIComponent(songTitle)}&genre=${encodeURIComponent(genre)}`;
-                // try { ... fetch lyrics ... }
-                // --- END OF ACTUAL LYRICS FETCH LOGIC ---
+                try {
+                    const response = await fetch(netlifyLyricsFunctionUrl);
+                    console.log("Lyrics Function Response Status (from client):", response.status);
+                    const lyricsResultText = await response.text(); 
+
+                    if (!response.ok) {
+                        let errorDetail = lyricsResultText; // Default to the raw text
+                        try {
+                            const parsedJsonError = JSON.parse(lyricsResultText); // Try to parse as JSON
+                            if (parsedJsonError && parsedJsonError.error) { // If successful and has an error property
+                                errorDetail = parsedJsonError.error;
+                            }
+                        } catch(e) {
+                            // Not JSON, or JSON without an 'error' property; 'errorDetail' remains the raw text.
+                            console.warn("Response from lyrics function was not a JSON error object, or did not contain an 'error' field. Raw text:", lyricsResultText);
+                        }
+                        console.error("Error from generateSongLyrics function (client side):", errorDetail);
+                        throw new Error(errorDetail || `Lyrics generation failed with status ${response.status}.`);
+                    }
+                    
+                    if (lyricsTextContainerElement) {
+                        lyricsTextContainerElement.textContent = lyricsResultText;
+                    }
+
+                } catch (error) {
+                    console.error("Error fetching lyrics (Client Side Catch Block):", error);
+                    const errorMessage = `Oh no! Lyric generation failed: ${error.message}`;
+                    if(lyricsTextContainerElement) {
+                        lyricsTextContainerElement.textContent = errorMessage;
+                    } else if (lyricsModal && lyricsModal.classList.contains('active') && modalLyricsText) { 
+                        modalLyricsText.textContent = errorMessage;
+                    } else {
+                        displayError(`Fetching lyrics failed: ${error.message}`);
+                    }
+                } finally {
+                    if(clickedButton) clickedButton.disabled = false;
+                    if(loaderElement) loaderElement.classList.add('hidden');
+                }
             }
 
 
