@@ -42,28 +42,38 @@
             padding: 4rem 0; 
         }
       
-        .hero-welcome-text {
-            font-size: 2.8rem; 
-            font-weight: 800; 
-            color: #FFFFFF; 
-            line-height: 1.3;
-            margin-bottom: 0.75rem; 
-        }
-        .hero-welcome-text .handwritten {
-            font-family: 'Dancing Script', cursive;
-            font-weight: 700; 
-            font-size: 3.8rem; 
-            color: #FF003C; 
-            margin: 0 0.25em; 
-        }
-         @media (min-width: 768px) {
-            .hero-welcome-text {
-                font-size: 3.8rem; 
-            }
-            .hero-welcome-text .handwritten {
-                font-size: 5rem; 
-            }
-        }
+        #heroLogoImage {
+    display: block; /* Makes it a block element for easier margin control */
+    max-width: 100%; /* Ensures the logo is responsive and doesn't overflow its container */
+    height: auto;    /* Maintains the aspect ratio when width changes */
+    /* Adjust max-height or a specific width/height if needed */
+    /* e.g., max-height: 80px; */
+    /* If you want to center it within the .hero-left (if .hero-left has text-align: left by default) */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    /* Or, if .hero-left is text-align: center, the image should center. */
+}
+
+.hero-welcome-text {
+    /* Original styles: */
+    /* font-size: 2.5rem;  -- May not be needed if only showing an image */
+    /* font-weight: 800; -- May not be needed */
+    /* color: #FFFFFF;   -- May not be needed */
+    line-height: normal; /* Reset line-height if it causes issues with image */
+    margin-bottom: 1rem; /* Keep or adjust as needed */
+    text-align: center; /* Add this if you want the image centered within the h1 */
+}
+
+@media (min-width: 768px) {
+    .hero-welcome-text {
+        /* font-size: 3.25rem; -- May not be needed */
+         text-align: left; /* Revert to left or keep center based on your design for larger screens */
+    }
+    /* You might want to define a different max-height for the logo on larger screens */
+    /* #heroLogoImage { */
+    /* max-height: 100px; */
+    /* } */
+}
         .hero-subtext { 
             font-size: 1rem; 
             font-weight: 500;
@@ -559,7 +569,7 @@
         <section class="hero-section">
             <div> 
                 <h1 class="hero-welcome-text">
-                    <span class="handwritten">Lirrical</span>
+                   <img src="assets/images/lirrical_logo.png" alt="LIRRICAL Logo" id="heroLogoImage">
                 </h1>
                 <p class="hero-subtext">
                     Blazing fast Song Titles, Song Lyrics & Cover Art Ideas
