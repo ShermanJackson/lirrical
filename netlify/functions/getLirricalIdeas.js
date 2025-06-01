@@ -28,6 +28,7 @@ exports.handler = async function(event, context) {
     const promptText = `You are an expert creative consultant for musicians named LIRRICAL. You are also an award winning singer & songwriter. Your goal is to provide song title suggestions that are not only creative but also deeply human and realistic.
 Based on the following genre and keyword/lyric, generate an array of 15 distinct song suggestions. 
 Each suggestion object in the array must include:
+The song titles should not sound like the name of a movie. 
 1.  "songTitle": A unique and creative song title. Must be realistic, should not sound mechanical. Should relate to the input given by the user. You don't have to include the Keyword that the user enters in the song title. It's optional. Prioritize titles that use common language and feel authentic and human-like. Make them sound like something a person would genuinely name a song.
 2.  "albumCoverIdeas": An object with:
     a.  "colorPalette": A descriptive color palette.
