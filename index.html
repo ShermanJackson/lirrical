@@ -42,32 +42,30 @@
             padding: 4rem 0; 
         }
       
-        #heroLogoImage {
-    display: block; /* Makes it a block element for easier margin control */
-    max-width: 100%; /* Ensures the logo is responsive and doesn't overflow its container */
-    height: auto;    /* Maintains the aspect ratio when width changes */
+#heroLogoImage {
+    display: block; /* Keep this as block */
+    max-width: 100%;
+    height: auto;
+    margin-left: auto;   /* <-- UNCOMMENT OR ADD THIS LINE */
+    margin-right: auto;  /* <-- UNCOMMENT OR ADD THIS LINE */
     /* Adjust max-height or a specific width/height if needed */
     /* e.g., max-height: 80px; */
-    /* If you want to center it within the .hero-left (if .hero-left has text-align: left by default) */
-    /* margin-left: auto; */
-    /* margin-right: auto; */
-    /* Or, if .hero-left is text-align: center, the image should center. */
 }
 
+/*
+   The .hero-welcome-text CSS can remain as it was,
+   though the 'text-align: center;' on it won't be what's centering
+   this specific block-level image anymore, but it doesn't hurt to keep.
+*/
 .hero-welcome-text {
-    /* Original styles: */
-    /* font-size: 2.5rem;  -- May not be needed if only showing an image */
-    /* font-weight: 800; -- May not be needed */
-    /* color: #FFFFFF;   -- May not be needed */
-    line-height: normal; /* Reset line-height if it causes issues with image */
-    margin-bottom: 1rem; /* Keep or adjust as needed */
-    text-align: center; /* Add this if you want the image centered within the h1 */
+    line-height: normal;
+    margin-bottom: 1rem;
+    text-align: center; /* This is fine to keep, might affect other future inline content */
 }
 
 @media (min-width: 768px) {
     .hero-welcome-text {
-        /* font-size: 3.25rem; -- May not be needed */
-         text-align: center; /* Revert to left or keep center based on your design for larger screens */
+        text-align: center; /* Fine to keep */
     }
     /* You might want to define a different max-height for the logo on larger screens */
     /* #heroLogoImage { */
