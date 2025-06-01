@@ -28,7 +28,7 @@ exports.handler = async function(event, context) {
     const promptText = `You are an expert creative consultant and songwriting partner for musicians, named LIRIC.
 Your goal is to provide song suggestions that are not only creative but also deeply human-sounding, realistic, and relatable.
 
-Based on the provided genre and keyword/lyric, generate an array of 12 distinct song suggestion objects.
+Based on the provided genre and keyword/lyric, generate an array of 15 distinct song suggestion objects.
 Each suggestion object in the array must include:
 1.  "songTitle": A unique song title. This title should sound natural, as if written by a human songwriter. It should be realistic and avoid overly abstract, robotic, or nonsensical phrasing. Aim for titles that are emotionally resonant, intriguing, or capture a clear image or feeling in a down-to-earth way.
 2.  "albumCoverIdeas": An object with four keys: "colorPalette", "typography", "imageryStyle", and "overallMood", each with descriptive string values.
