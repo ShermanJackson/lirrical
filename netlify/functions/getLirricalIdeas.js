@@ -25,16 +25,66 @@ exports.handler = async function(event, context) {
     }
 
     // 3. Construct the prompt (same as your client-side version)
-    const promptText = `You are an expert creative consultant for musicians named LIRRICAL. You are also an award winning singer & songwriter. Your goal is to provide song title suggestions that are not only creative but also deeply human and realistic.
-Based on the following genre and keyword/lyric, generate an array of 15 distinct song suggestions. 
+    const promptText = `You are an expert creative consultant and songwriting partner for musicians, named LIRIC.
+Your goal is to provide song suggestions that are not only creative but also deeply human-sounding, realistic, and relatable.
+
+Based on the provided genre and keyword/lyric, generate an array of 12 distinct song suggestion objects.
 Each suggestion object in the array must include:
-The song titles should not sound like the name of a movie. 
-1.  "songTitle": A unique and creative song title. Must be realistic, should not sound mechanical. Should relate to the input given by the user. You don't have to include the Keyword that the user enters in the song title. It's optional. Prioritize titles that use common language and feel authentic and human-like. Make them sound like something a person would genuinely name a song.
-2.  "albumCoverIdeas": An object with:
-    a.  "colorPalette": A descriptive color palette.
-    b.  "typography": Suggested typography style.
-    c.  "imageryStyle": Ideas for imagery or visual elements.
-    d.  "overallMood": The overall mood or vibe the cover should convey.
+1.  "songTitle": A unique song title. This title should sound natural, as if written by a human songwriter. It should be realistic and avoid overly abstract, robotic, or nonsensical phrasing. Aim for titles that are emotionally resonant, intriguing, or capture a clear image or feeling in a down-to-earth way.
+2.  "albumCoverIdeas": An object with four keys: "colorPalette", "typography", "imageryStyle", and "overallMood", each with descriptive string values.
+
+Here are a few examples of the desired output style for a single suggestion object, paying close attention to the 'songTitle':
+
+--- Example 1 ---
+Input Context:
+Genre: Folk
+Keyword/Lyric: "river bend, old memories, quiet reflection"
+
+Desired Output Style for one suggestion object:
+{
+  "songTitle": "Where the River Remembers",
+  "albumCoverIdeas": {
+    "colorPalette": "Muted earthy tones: soft greens, river blues, and warm greys, with a hint of faded sepia.",
+    "typography": "A gentle, slightly weathered serif font or a clean, classic handwritten script.",
+    "imageryStyle": "A tranquil river scene at dusk or dawn, perhaps with an old wooden bridge or a solitary tree. Soft focus, evoking nostalgia.",
+    "overallMood": "Reflective, peaceful, nostalgic, heartfelt"
+  }
+}
+--- End Example 1 ---
+
+--- Example 2 ---
+Input Context:
+Genre: Pop
+Keyword/Lyric: "city pulse, late night, searching for connection"
+
+Desired Output Style for one suggestion object:
+{
+  "songTitle": "Streetlight Searchers",
+  "albumCoverIdeas": {
+    "colorPalette": "Vibrant city neons (pinks, blues, purples) against dark backgrounds, or a more intimate warm glow from a window.",
+    "typography": "Modern, sleek sans-serif or a stylish, slightly edgy script.",
+    "imageryStyle": "Blurred city lights, figures walking in the rain, a silhouette against a bright sign, or a close-up conveying longing.",
+    "overallMood": "Yearning, hopeful, urban, contemporary"
+  }
+}
+--- End Example 2 ---
+
+--- Example 3 ---
+Input Context:
+Genre: Synthwave
+Keyword/Lyric: "retro highway, 80s chrome, chasing the horizon"
+
+Desired Output Style for one suggestion object:
+{
+  "songTitle": "Horizon Drive '88",
+  "albumCoverIdeas": {
+    "colorPalette": "Hot pinks, electric blues, deep purples, sunset oranges, with chrome and black accents.",
+    "typography": "Classic 80s retro fonts, often with a metallic sheen, grid lines, or neon glow effect.",
+    "imageryStyle": "A vintage sports car driving into a wireframe sunset, neon grids, palm tree silhouettes, retro-futuristic cityscapes.",
+    "overallMood": "Nostalgic, energetic, cool, futuristic-retro"
+  }
+}
+--- End Example 3 ---
 
 Genre: ${genre}
 Keyword/Lyric: "${keywords}"
