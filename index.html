@@ -479,7 +479,6 @@
         }
         /* End Modal Styles */
 
-
         .error-message {
             background-color: rgba(50, 0, 10, 0.8); 
             color: #FFA0B8; 
@@ -556,6 +555,41 @@
         .hidden {
             display: none !important; 
         }
+
+/* New Button Style for "Download Cover Art" */
+.btn-download-cover {
+    display: inline-block; /* Allows for padding and centering text */
+    background: linear-gradient(180deg, #2D2D2D 0%, #1A1A1A 100%); /* Glassy black gradient */
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 1rem; /* Match primary button or adjust as needed */
+    padding: 12px 28px; /* Adjust padding for desired size */
+    border-radius: 8px; /* Rounded corners like the example */
+    text-decoration: none; /* Remove underline from link */
+    text-align: center;
+    border: 1px solid #444; /* Subtle border */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2), /* Inner shadow for depth */
+                inset 0 1px 1px rgba(255,255,255,0.1); /* Subtle top highlight for glass effect */
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem; /* Space above the footer text */
+    width: auto; /* Allow button to size to content, or set a specific width */
+    max-width: 320px; /* Optional: prevent it from getting too wide */
+    /* margin-left: auto; /* Removed direct margin auto here */
+    /* margin-right: auto; /* Removed direct margin auto here */
+}
+.btn-download-cover:hover {
+    background: linear-gradient(180deg, #333333 0%, #222222 100%);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3),
+                inset 0 1px 1px rgba(255,255,255,0.15);
+    transform: translateY(-1px);
+}
+.download-button-container { /* Added container for centering */
+    text-align: center; /* Centers the inline-block button */
+    width: 100%; /* Takes full width to allow centering */
+    padding-left: 20px; /* To align with overall container padding */
+    padding-right: 20px; /* To align with overall container padding */
+    box-sizing: border-box; /* Ensures padding is included in width calculation */
+}
 
     </style>
 </head>
@@ -638,7 +672,11 @@
             <p>Lirrical uses artificial intelligence to spark your creativity. All lyrics, titles, and ideas are AI-generated and intended for inspiration only. Let your imagination take it from here!</p>
         </div>
     </div>
-
+<div class="download-button-container">
+    <a href="https://www.premadepixels.com/pixels-template-shop" target="_blank" class="btn-download-cover">
+        Download Cover Art
+    </a>
+</div>
     <footer class="site-footer">
         <p>In partnership with <a href="https://www.premadepixels.com">PremadePixels.com</a></p>
     </footer>
