@@ -1,0 +1,11 @@
+# This tells Netlify how to build your site and functions.
+
+[build]
+  # This line tells Netlify where your serverless functions folder is located.
+  functions = "netlify/functions"
+
+# This section sets options for all of your functions.
+[functions]
+  # Sets the maximum execution time for functions in seconds.
+  # The max for the free tier is 10 seconds.
+  timeout = 10
