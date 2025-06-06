@@ -144,11 +144,7 @@ Make titles realistic and emotionally resonant. Match album cover ideas to the g
                 
                 return {
                     statusCode: 200,
-                    body: JSON.stringify({
-                        suggestions: suggestionsArray,
-                        processingTime: processingTime,
-                        count: suggestionsArray.length
-                    }), 
+                    body: JSON.stringify(suggestionsArray), // Return array directly (like original)
                     headers: { 
                         "Content-Type": "application/json",
                         "Access-Control-Allow-Origin": "*", // Adjust for your domain
