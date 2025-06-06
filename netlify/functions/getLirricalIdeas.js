@@ -41,11 +41,13 @@ exports.handler = async function(event, context) {
         }
 
         // 3. OPTIMIZED SHORTER PROMPT - This is the key optimization
-        const promptText = `Generate 10 song suggestions for ${genre} music using keywords: "${keywords}".
+        const promptText = `Generate 10 creative song suggestions for ${genre} music inspired by the themes and emotions in: "${keywords}".
+
+IMPORTANT: Do NOT copy the exact keywords into the song titles. Instead, use the keywords as inspiration to create unique, varied titles that capture the same feeling or concept.
 
 Return a JSON array of objects with this structure:
 {
-  "songTitle": "Creative human-sounding title",
+  "songTitle": "Creative human-sounding title (avoid repeating the exact keywords)",
   "albumCoverIdeas": {
     "colorPalette": "Color description",
     "typography": "Font style description", 
@@ -54,7 +56,7 @@ Return a JSON array of objects with this structure:
   }
 }
 
-Make titles realistic and emotionally resonant. Match album cover ideas to the genre and mood.`;
+Make titles realistic, emotionally resonant, and DIVERSE. Each title should feel unique while capturing the essence of the keyword themes.`;
 
         let chatHistory = [{ role: "user", parts: [{ text: promptText }] }];
                 
